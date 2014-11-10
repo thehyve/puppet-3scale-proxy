@@ -38,17 +38,16 @@ class nginx (
   file {
     "${openresty_path}/nginx/conf/nginx.conf":
       ensure  => 'present',
-      source  => "puppet:///modules/nginx/proxy_configs/nginx_${provider_id}.conf",
+      source  => "puppet:///files/qualify/qsp.conf",
       require => [ User['nginx'], Exec['make-install'] ],
       notify  => Service['nginx']
   }
 
-  file {
-    "${openresty_path}/nginx/conf/nginx_${provider_id}.lua":
-      ensure => 'present',
-      source => "puppet:///modules/nginx/proxy_configs/nginx_${provider_id}.lua",
-      require => File["${openresty_path}/nginx/conf/nginx.conf"],
-      notify  => Service['nginx']
+  file {'${openresty_path}/nginx/conf/qsp':
+      ensure  => directory,
+      recurse => true,
+      purge   => true,
+      source  => 'puppet:///files/qualify/qsp/',
   }
 
   file {
