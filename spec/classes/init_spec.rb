@@ -28,8 +28,8 @@ describe "nginx" do
   end
 
   it do
-    should contain_file("#{openresty_path}/nginx/conf/nginx_#{provider_id}.lua").with({
-      'ensure' => 'present',
+    should contain_file("#{openresty_path}/nginx/conf/qsp").with({
+      'ensure' => 'directory',
       'mode'   => '0644',
       'owner'  => 'nginx',
       'group'  => 'nginx'

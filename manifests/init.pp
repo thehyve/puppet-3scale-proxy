@@ -38,7 +38,7 @@ class nginx (
   file {
     "${openresty_path}/nginx/conf/nginx.conf":
       ensure  => 'present',
-      source  => "puppet:///files/qualify/qsp.conf",
+      source  => "puppet:///qualify/qsp.conf",
       require => [ User['nginx'], Exec['make-install'] ],
       notify  => Service['nginx']
   }
@@ -47,7 +47,7 @@ class nginx (
       ensure  => directory,
       recurse => true,
       purge   => true,
-      source  => 'puppet:///files/qualify/qsp/',
+      source  => 'puppet:///qualify/qsp/',
   }
 
   file {

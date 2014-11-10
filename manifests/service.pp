@@ -34,6 +34,6 @@ class nginx::service (
       pattern    => 'nginx',
       hasstatus  => true,
       hasrestart => true,
-      require    => [ File["${openresty_path}/nginx/conf/nginx.conf"], File["${openresty_path}/nginx/conf/nginx_${provider_id}.lua"], File['/etc/init.d/nginx'] ]
+      require    => [ File["${openresty_path}/nginx/conf/nginx.conf"], File["${openresty_path}/nginx/conf/qsp"], File['/etc/init.d/nginx'] ]
   }
 }
