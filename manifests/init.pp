@@ -43,7 +43,8 @@ class nginx (
       notify  => Service['nginx']
   }
 
-  file {'${openresty_path}/nginx/conf/qsp':
+  file {
+    "${openresty_path}/nginx/conf/qsp":
       ensure  => directory,
       recurse => true,
       purge   => true,
