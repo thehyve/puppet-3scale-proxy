@@ -18,6 +18,10 @@ DAEMON=<%= @openresty_path %>/nginx/sbin/nginx
 NAME=nginx
 DESC=nginx
 
+# nginx stores its own pid file and the PID in the init-generated
+# pid file is incorrect. For that reason, we use the nginx pidfile
+PIDFILE=<%= @openresty_path %>/nginx/logs/nginx.pid
+
 # Include nginx defaults if available
 if [ -f /etc/default/nginx ]; then
         . /etc/default/nginx
@@ -47,14 +51,14 @@ case "$1" in
                         # Set the ulimits
                         ulimit $ULIMIT
                 fi
-                start-stop-daemon --start --quiet --make-pidfile --pidfile /var/run/$NAME.pid \
+                start-stop-daemon --start --quiet \
                     --exec $DAEMON -- $DAEMON_OPTS || true
                 echo "$NAME."
                 ;;
 
         stop)
                 echo -n "Stopping $DESC: "
-                start-stop-daemon --stop --quiet --pidfile /var/run/$NAME.pid \
+                start-stop-daemon --stop --quiet --pidfile $PIDFILE \
                     --exec $DAEMON || true
                 echo "$NAME."
                 ;;
@@ -62,18 +66,18 @@ case "$1" in
         restart|force-reload)
                 echo -n "Restarting $DESC: "
                 start-stop-daemon --stop --quiet --pidfile \
-                    /var/run/$NAME.pid --exec $DAEMON || true
+                    $PIDFILE --exec $DAEMON || true
                 sleep 1
                 test_nginx_config
-                start-stop-daemon --start --quiet --make-pidfile --pidfile \
-                    /var/run/$NAME.pid --exec $DAEMON -- $DAEMON_OPTS || true
+                start-stop-daemon --start --quiet \
+                    --exec $DAEMON -- $DAEMON_OPTS || true
                 echo "$NAME."
                 ;;
 
         reload)
                 echo -n "Reloading $DESC configuration: "
                 test_nginx_config
-                start-stop-daemon --stop --signal HUP --quiet --pidfile /var/run/$NAME.pid \
+                start-stop-daemon --stop --signal HUP --quiet --pidfile $PIDFILE \
                     --exec $DAEMON || true
                 echo "$NAME."
                 ;;
@@ -88,7 +92,7 @@ case "$1" in
                 ;;
 
         status)
-                status_of_proc -p /var/run/$NAME.pid "$DAEMON" nginx && exit 0 || exit $?
+                status_of_proc -p $PIDFILE "$DAEMON" nginx && exit 0 || exit $?
                 ;;
         *)
                 echo "Usage: $NAME {start|stop|restart|reload|force-reload|status|configtest}" >&2
