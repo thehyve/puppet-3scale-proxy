@@ -50,7 +50,7 @@ class nginx::install (
       uid        => '1200',
       gid        => '1200',
       shell      => '/bin/false',
-      groups     => 'nginx',
+      groups     => ['nginx', 'ssl-cert'],
       system     => true,
   }
 
