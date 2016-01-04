@@ -16,6 +16,6 @@
 class nginx::params {
   $provider_id       = '48'
   $openresty_path    = '/opt/openresty'
-  $openresty_version = '1.2.3.8'
+  $openresty_version = '1.9.3.2'
   $prefix            = '/usr/src'
 }
