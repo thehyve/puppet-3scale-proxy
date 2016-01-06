@@ -75,7 +75,7 @@ class nginx::install (
 
   # Configure nginx with needed options --with-luajit is required.
   exec {
-    "/bin/ls | ./configure --prefix=${openresty_path} --with-luajit --with-http_iconv_module -j2 && touch ${prefix}/ngx_openresty-${openresty_version}/.config":
+    "/bin/ls | ./configure --prefix=${openresty_path} --with-luajit --with-http_iconv_module --with-ipv6 --with-pcre-jit -j2 && touch ${prefix}/ngx_openresty-${openresty_version}/.config":
       path    => [ '/bin/', '/sbin/' ,'/usr/bin/','/usr/sbin/' ],
       cwd     => "${prefix}/ngx_openresty-${openresty_version}",
       require => [ Package['libreadline-dev'], Package['libncurses5-dev'], Package['libpcre3'], Package['libpcre3-dev'], Package['libssl-dev'], Package['perl'], Exec['untar-nginx-source'] ],
