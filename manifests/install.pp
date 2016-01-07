@@ -54,6 +54,13 @@ class nginx::install (
       system     => true,
   }
 
+  exec { "openssl dhparam -out dhparam.pem 2048":
+    path    => [ '/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/' ],
+    cwd     => '/etc/ssl/certs',
+    creates => '/etc/ssl/certs/dhparam.pem',
+    require => Package['openssl']
+  }
+
   # Ensure we have the needed Nginx and dependencies packages
   file {
     "/usr/src/ngx_openresty-${openresty_version}.tar.gz":

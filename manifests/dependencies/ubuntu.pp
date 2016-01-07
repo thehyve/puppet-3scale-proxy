@@ -7,4 +7,5 @@ class nginx::dependencies::ubuntu {
   if ! defined(Package['libpcre3-dev']) {    package { 'libpcre3-dev':    ensure => 'installed', provider => 'aptitude' } }
   if ! defined(Package['libssl-dev']) {      package { 'libssl-dev':      ensure => 'installed', provider => 'aptitude' } }
   if ! defined(Package['perl']) {            package { 'perl':            ensure => 'installed', provider => 'aptitude' } }
+  if ! defined(Package['openssl']) {         package { 'openssl':         ensure => 'installed', provider => 'aptitude' } }
 }
