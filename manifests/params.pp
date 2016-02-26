@@ -18,4 +18,5 @@ class nginx::params {
   $openresty_path    = '/opt/openresty'
   $openresty_version = '1.9.3.2'
   $prefix            = '/usr/src'
+  $tarball_path      = 'http://files.thehyve.net'
 }

@@ -21,7 +21,8 @@ class nginx::install (
   $provider_id       = "${nginx::params::provider_id}",
   $openresty_version = "${nginx::params::openresty_version}",
   $prefix            = "${nginx::params::prefix}",
-  $openresty_path    = "${nginx::params::openresty_path}"
+  $openresty_path    = "${nginx::params::openresty_path}",
+  $tarball_path      = "${nginx::params::tarball_path}",
   ) inherits nginx::params {
 
   File {
@@ -62,10 +63,10 @@ class nginx::install (
   }
 
   # Ensure we have the needed Nginx and dependencies packages
-  file {
-    "/usr/src/ngx_openresty-${openresty_version}.tar.gz":
-      ensure  => 'present',
-      source  => "puppet:///modules/nginx/packages/ngx_openresty-${openresty_version}.tar.gz",
+  $tarball = "$prefix/ngx_openresty-${openresty_version}.tar.gz"
+  exec { "create $tarball":
+      command => "/usr/bin/wget -O '$tarball' '$tarball_path/ngx_openresty-${openresty_version}.tar.gz'",
+      creates => $tarball,
       alias   => 'nginx-source-tgz',
       before  => Exec['untar-nginx-source']
   }
@@ -77,7 +78,7 @@ class nginx::install (
       cwd       => "${prefix}",
       creates   => "${prefix}/ngx_openresty-${openresty_version}",
       alias     => 'untar-nginx-source',
-      subscribe => File['nginx-source-tgz']
+      subscribe => Exec['nginx-source-tgz']
   }
 
   # Configure nginx with needed options --with-luajit is required.
